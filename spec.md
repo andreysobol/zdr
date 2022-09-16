@@ -32,6 +32,7 @@ If exodus is not started:
 
 1. Check that `withdrawId` in `WaitingForWithdraw` structure.
 2. Check that `L1BlockNumber` + `WITHDRAW_WAITING_TIME` of the deposit is less than current `L1BlockNumber`
+3. Start Exodus
 
 ### ExecuteBlock
 
@@ -43,5 +44,7 @@ If exodus is not started:
 6. Send ETH to all `WithdrawsBytes`
 7. Remove all elements of `WithdrawsBytes` from `WaitingForWithdrawals` map
 8. Emmit `BlockExecuted` event with `L2blockNumber`, `newMerkleRoot`, `hash(DepositsBytes)`, `hash(WithdrawsBytes)`
+
+### StartExodus
 
 ## Circuit
