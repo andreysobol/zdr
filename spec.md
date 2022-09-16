@@ -35,7 +35,13 @@ If exodus is not started:
 
 ### ExecuteBlock
 
-1. Set `prevMerkleRoot` as value from `merkleRoots` by key `lastL2blockNumber`  
-2. Verify proof with `prevMerkleRoot` and `newMerkleRoot` and `proof`
+1. Set `prevMerkleRoot` as value from `merkleRoots` by key `lastL2blockNumber`
+2. Calculate `hash(DepositsBytes)`
+3. Calculate `hash(WithdrawsBytes)`
+4. Verify proof with `prevMerkleRoot`, `newMerkleRoot`, `hash(DepositsBytes)`, `hash(WithdrawsBytes)` and `proof`
+5. Remove all elements of `DepositsBytes` from some magic structure of the deposits
+6. Send ETH to all `WithdrawsBytes`
+7. Remove all elements of `WithdrawsBytes` from `WaitingForWithdrawals` map
+8. Emmit `BlockExecuted` event with `L2blockNumber`, `newMerkleRoot`, `hash(DepositsBytes)`, `hash(WithdrawsBytes)`
 
 ## Circuit
