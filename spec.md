@@ -17,7 +17,7 @@ Deposit ETH to the contract. This function should:
 1. Increase number of `mintedCoinsCounter`. 
 2. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
 3. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
-4. Add deposit to some magic structure of the deposit. Mb it's will be maping of address to amount of ETH and `coinId` of the deposit.
+4. Add deposit to some magic structure of the deposit. Mb it's will be maping of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
 5. Increase unprocessed deposits amount.
 
 ### Withdraw
@@ -32,7 +32,7 @@ If exodus is not started:
 
 1. Check that `withdrawId` in `WaitingForWithdraw` structure.
 2. Check that `L1BlockNumber` + `WITHDRAW_WAITING_TIME` of the deposit is less than current `L1BlockNumber`
-3. Start Exodus
+3. Start exodus if it's not started.
 
 ### ExecuteBlock
 
@@ -46,5 +46,10 @@ If exodus is not started:
 8. Emmit `BlockExecuted` event with `L2blockNumber`, `newMerkleRoot`, `hash(DepositsBytes)`, `hash(WithdrawsBytes)`
 
 ### StartExodus
+
+1. Check that `exodusStarted` is false
+2. Set `censouredDeposits` as value from some magic structure of the deposits with key `censouredDepositId`
+3. Check that L1BlockNumber from `censouredDeposits` + `DEPOSIT_WAITING_TIME` is less than current `L1BlockNumber`
+4. Emmit `ExodusStarted` event
 
 ## Circuit
