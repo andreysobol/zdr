@@ -54,7 +54,7 @@ TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 2. Set `censouredDeposits` as value from some magic structure of the deposits with key `censouredDepositId`
 3. Check that L1BlockNumber from `censouredDeposits` + `DEPOSIT_WAITING_TIME` is less than current `L1BlockNumber`
 4. Emmit `ExodusStarted` event
-4. `exodusStarted` = true
+5. `exodusStarted` = true
 
 ## Circuit
 
