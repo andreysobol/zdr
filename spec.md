@@ -68,7 +68,7 @@ Public inputs:
 - `initallStateRoot`
 - `finalStateRoot`
 - `hash(contractWithdrawals)`
-- `hash(withdrawals))`
+- `hash(withdrawals)`
 - `markle_root(wrongWithdrawals)`
 - `hash(deposits)`
 
@@ -119,6 +119,7 @@ save final state to `stateAfterDeposit`
 
 ```
 hash(transactions) = transactions_hash
+transferAccomulator = empty_merkle_tree
 ```
 
 for every transaction:
@@ -129,17 +130,28 @@ verify merkle proof of note from transaction
 savedAmount + fee = amount
 operatorFee = fee + operatorFee
 check(signature, from_address)
-state = addOneToMerkleTree(state, ("WATING_CONFIRMATION", from_address, to_address, amount, coin_id, signature)
+state = addOneToMerkleTree(state, from_address, to_address, amount, coin_id, signature)
+transferAccomulator = addOneToMerkleTree(transferAccomulator, transaction)
 ```
 
 ### Commit part
 
+for every withdrawal:
+
 ```
-transaction_confirmation = (transaction_hash, signature) or FALSE
+state == removeElement(state, withdrawal)
+transferAccomulator == removeElement(transferAccomulator, withdrawal)
 ```
 
 for every transaction_confirmation:
 
 ```
-transaction_confirmation == FALSE and state == stateAfterDeposit
+transaction_confirmation = (transaction, signature)
+transaction = (from_address, to_address, amount, coin_id, signature)
+check(signature, to_address)
+transferAccomulator == removeElement(transferAccomulator, transaction)
+```
+
+in the end check that `transferAccomulator == empty_merkle_tree`
+
 ```
