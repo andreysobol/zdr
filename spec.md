@@ -93,6 +93,13 @@ check this statment:
         state == removeElement(state, merklePosition)
     ) or 
     (
+        (
+            coinId != stateCoinId
+            or
+            amount != stateAmount
+            or
+            address != stateAddress
+        )
         nextCccomulatorWrongWithdrawals = addOneToMerkleTree(prevAccomulatorWrongWithdrawals, withdrawal)
     )
 ```
