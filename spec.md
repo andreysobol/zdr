@@ -27,7 +27,7 @@ If exodus is not started:
 3. Verify that `coinId` is not used before. If it's used - check that `coinId` > current `coinId` from `usedCoinIds`
 5. Remove previous withdraw from `WaitingForWithdrawals`
 6. Emmit `WaitingForWithdraw` event with `amount` and `address` of the sender
-7. Add this withdraw to `WaitingForWithdrawals` map. Set `amount` and `address` and `L1BlockNumber` of the deposit.
+7. Add this withdraw to `WaitingForWithdrawals` map. Set `amount` and `address` and `L1BlockNumber` and `merklePosition` and `coinId` of the deposit.
 
 ### ProcessWithdraw
 
@@ -63,6 +63,20 @@ Circuit separetadet do 4 parts:
 - Deposit parts
 - Transfer commitment parts
 - Transfer execution parts
+
+Public inputs:
+- `hash(withdrawals)`
+
+### Contract withdraw parts
+
+```
+hash(withdrawals) = withdrawals
+```
+
+for every withdrawal:
+```
+withdrawal = (coinId, amount, address)
+```
 
 
 Commitment part and execution part.
