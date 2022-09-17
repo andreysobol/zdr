@@ -161,5 +161,3 @@ transferAccomulator == removeElement(transferAccomulator, transaction)
 ```
 
 in the end check that `transferAccomulator == empty_merkle_tree`
-
-```
