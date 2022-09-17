@@ -16,7 +16,7 @@ Deposit ETH to the contract. This function should:
 1. Increase number of `mintedCoinsCounter`. 
 2. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
 3. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
-4. Add deposit to some magic structure of the deposit. Mb it's will be maping of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
+4. Add deposit to map of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
 5. Increase unprocessed deposits amount.
 
 ### Withdraw
@@ -54,6 +54,7 @@ TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 2. Set `censouredDeposits` as value from some magic structure of the deposits with key `censouredDepositId`
 3. Check that L1BlockNumber from `censouredDeposits` + `DEPOSIT_WAITING_TIME` is less than current `L1BlockNumber`
 4. Emmit `ExodusStarted` event
+4. `exodusStarted` = true
 
 ## Circuit
 

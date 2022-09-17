@@ -9,28 +9,46 @@ pragma solidity >=0.7.0 <0.9.0;
  */
 contract ZeroDataRollup {
 
+    uint256 public mintedCoinsCounter; // default 0
+    uint256 public unprocessedDepositAmount; // default 0
+    mapping(address => hereWillBeStructure) public mintedCoins; // default 0
+
     function deposit(
         address _l2Receiver,
         address _l1Token,
         uint256 _amount)
+    // TODO: remove nonReentrant
     external payable nonReentrant returns (bytes32 txHash) {
-        require(_l1Token == CONVENTIONAL_ETH_ADDRESS);
 
-        // Will revert if msg.value is less than the amount of the deposit
-        uint256 fee = msg.value - _amount;
-        bytes memory l2TxCalldata = _getDepositL2Calldata(msg.sender, _l2Receiver, _amount);
-        txHash = Mailbox.requestL2Transaction{value: fee}(
-            l2Bridge,
-            0,
-            l2TxCalldata,
-            DEPOSIT_ERGS_LIMIT,
-            new bytes[](0)
-        );
+        /*
 
-        // Save deposit amount, to claim funds back if the L2 transaction will failed
-        depositAmount[msg.sender][txHash] = _amount;
+        Deposit ETH to the contract. This function should:
+        1. Increase number of `mintedCoinsCounter`. 
+        2. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
+        3. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
+        4. Add deposit to some magic structure of the deposit. Mb it's will be maping of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
+        5. Increase unprocessed deposits amount.
 
-        emit DepositInitiated(msg.sender, _l2Receiver, _l1Token, _amount);
+        */
+
+        uint256 coinId = mintedCoinsCounter;
+
+        mintedCoinsCounter = mintedCoinsCounter + 1;
+
+        message.sender
+
+        // TODO intoduce Deposit event
+        // TODO Check the amount of ETH 
+        Deposit(coinId, message.sender, message.value.amount);
+
+        mintedCoins = message.sender : {
+            coinId: coinId,
+            amount: message.value.amount,
+            l1BlockNumber: block.number,
+        }
+
+        unprocessedDepositAmount = unprocessedDepositAmount + 1;
+
     }
 
     /**
