@@ -2,43 +2,56 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import "./Storage.sol";
+
 /**
- * @title Storage
+ * @title ZeroDataRollup
  * @dev Store & retrieve value in a variable
  * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
  */
-contract ZeroDataRollup {
-
-    event DepositInitiated(address indexed from, address indexed to, uint256 indexed coinId);
-
-    uint256 public mintedCoinsCounter; // default 0
-    uint256 public unprocessedDepositAmount; // default 0
-
-    struct DepositDetails {
-        uint256 coinId;
-        uint256 amount;
-        uint256 l1BlockNumber; 
+contract ZeroDataRollup is Storage {
+    modifier notExodus() {
+        require(!isExodus, "Exodus activated");
+        _;
     }
-    mapping(address => DepositDetails) public mintedCoins; // default 0
 
-    function deposit(
-        address _l2Receiver)
-    external payable {  
-        require(msg.value > 0);  
+    function deposit(address _l2Receiver) external payable notExodus {
+        require(msg.value > 0);
 
         uint256 coinId = mintedCoinsCounter;
-        mintedCoinsCounter = mintedCoinsCounter + 1;
+        mintedCoinsCounter++;
 
-        emit DepositInitiated(msg.sender, _l2Receiver, coinId);
-
-        DepositDetails memory depositDetails= DepositDetails (
-            coinId,
+        DepositDetails memory depositDetails = DepositDetails(
+            _l2Receiver,
             msg.value,
             block.number
         );
 
-        mintedCoins[msg.sender] = depositDetails;
+        priorityQueue[coinId] = depositDetails;
 
-        unprocessedDepositAmount = unprocessedDepositAmount + 1;
+        emit DepositInitiated(msg.sender, _l2Receiver, coinId, msg.value);
+    }
+
+    function withdraw(address _l1Receiver) external {}
+
+    function ExecuteBlock(
+        uint256 newMerkleRoot,
+        bytes calldata depositsBytes,
+        bytes calldata withdrawsBytes,
+        uint256[] calldata proof
+    ) external notExodus {
+        bytes32 prevMerkleRoot = merkleRoots[currentBlockNumber];
+        bytes32 hashedDeposits = keccak256(depositsBytes);
+        bytes32 hashedWithdraws = keccak256(withdrawsBytes);
+
+        currentBlockNumber++;
+        // verify(prevMerkleRoot, newMerkleRoot, proof);
+    }
+
+    function verify(
+        uint256[] memory public_inputs,
+        uint256[] memory serialized_proof
+    ) public view returns (bool) {
+        return true;
     }
 }
