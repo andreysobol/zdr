@@ -13,11 +13,12 @@ List of functions:
 ### Deposit
 
 Deposit ETH to the contract. This function should:
-1. Increase number of `mintedCoinsCounter`. 
-2. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
-3. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
-4. Add deposit to map of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
-5. Increase unprocessed deposits amount.
+1. Check that exodus mode is not active.
+2. Increase number of `mintedCoinsCounter`. 
+3. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
+4. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
+5. Add deposit to map of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
+6. Increase unprocessed deposits amount.
 
 ### Withdraw
 
