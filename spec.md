@@ -56,3 +56,18 @@ TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 4. Emmit `ExodusStarted` event
 
 ## Circuit
+
+Circuit separetadet do 2 parts. Commitment part and execution part.
+
+Comman variables and constraints:
+
+```
+hash(transactions) = transactions_hash
+```
+
+# Commit part
+
+for every transaction
+
+```
+```
