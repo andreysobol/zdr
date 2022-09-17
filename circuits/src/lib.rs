@@ -99,4 +99,8 @@ fn test_main_circuit() {
             .unwrap();
 
     assert!(valid);
+
+    let mut path = "vk.txt";
+    let mut output = std::fs::File::create(path).unwrap();
+    vk.write(&mut output).unwrap();
 }

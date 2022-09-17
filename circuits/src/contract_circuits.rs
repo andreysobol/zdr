@@ -219,9 +219,6 @@ pub fn prove_tx<E: Engine, CS: ConstraintSystem<E>> (
     let two = Num::<E>::Constant(E::Fr::from_str("2").unwrap());
     let three = Num::<E>::Constant(E::Fr::from_str("3").unwrap());
 
-
-
-
     update_state(cs, tx_number, state, order_inner)?;
 
     Ok(())
