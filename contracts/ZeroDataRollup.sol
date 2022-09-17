@@ -63,7 +63,7 @@ contract ZeroDataRollup is Storage {
             _itemHash
         );
 
-        emit WithdrawRequestAccepted(msg.sender, _coinId, _blockNumber);
+        emit WithdrawRequestAccepted(currentWithdrawals, msg.sender, _coinId, _blockNumber);
     }
 
     function finalizeWithdraw(uint256 withdrawId) external notExodus {

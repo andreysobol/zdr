@@ -14,6 +14,7 @@ contract Storage {
     );
 
     event WithdrawRequestAccepted(
+        uint256 currentWithdrawals,
         address from,
         uint256 coinId,
         uint256 blockNumber
