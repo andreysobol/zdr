@@ -25,6 +25,8 @@ So every owners and past owners of the coin know merkle path of this coin in som
 
 Indivisible notes can be NFT. So it's perfect feet for NFT marketplaces and NFT games.
 
+![NFT](imgs/nft.jpeg)
+
 # Atomic transaction and atomic swaps
 
 We can introduce atomic transaction where 2 user exchange few indivisible notes. It's trivial.
