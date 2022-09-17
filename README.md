@@ -1,6 +1,6 @@
 # Zero Data Rollup
 
-!(imgs/horsecartext.jpeg)
+![Horse and car](imgs/horsecartext.jpeg)
 
 Zero Data Rollup: it's a protocol with rollup security properties and off-chain data availability. 
 
