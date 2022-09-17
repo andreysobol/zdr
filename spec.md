@@ -65,43 +65,81 @@ Circuit separetadet do 4 parts:
 - Transfer execution parts
 
 Public inputs:
-- `hash(withdrawals)`
+- `initallStateRoot`
+- `finalStateRoot`
+- `hash(contractWithdrawals)`
+- `hash(withdrawals))`
+- `markle_root(wrongWithdrawals)`
+- `hash(deposits)`
 
 ### Contract withdraw parts
 
 ```
-hash(withdrawals) = withdrawals
+hash(contractWithdrawals) = contractWithdrawals
+accomulatorWrongWithdrawals = empty_merkle_tree
+initallStateRoot == state
 ```
 
-for every withdrawal:
+for every contractWithdrawal:
 ```
-withdrawal = (coinId, amount, address)
+contractWithdrawal = (coinId, amount, address, merklePosition)
+(stateCoinId, stateAmount, stateAddress) = state_tree[merklePosition]
+check this statment:
+    (
+        coinId == stateCoinId
+        amount == stateAmount
+        address == stateAddress
+        state == removeElement(state, merklePosition)
+    ) or 
+    (
+        nextCccomulatorWrongWithdrawals = addOneToMerkleTree(prevAccomulatorWrongWithdrawals, withdrawal)
+    )
 ```
 
+and check that `accomulatorWrongWithdrawals == markle_root(wrongWithdrawals)`
 
-Commitment part and execution part.
+save final state to `stateAfterWithdrawals`
 
-Comman variables and constraints:
+### Deposit parts
+
+```
+hash(deposits) = deposits
+state = stateAfterWithdrawals
+```
+
+for every deposit:
+```
+deposit = (coinId, amount, address)
+state = addOneToMerkleTree(state, deposit)
+```
+
+save final state to `stateAfterDeposit`
+
+### Transfer commitment parts
 
 ```
 hash(transactions) = transactions_hash
 ```
 
-```
-transaction = (from_address, to_address, amount, coin_id, signature)
-```
+for every transaction:
 
 ```
-transaction_confirmation = (transaction_hash, signature)
+transaction = (from_address, to_address, amount, coin_id, signature)
+verify merkle proof of note from transaction
+savedAmount + fee = amount
+operatorFee = fee + operatorFee
+check(signature, from_address)
+state = addOneToMerkleTree(state, ("WATING_CONFIRMATION", from_address, to_address, amount, coin_id, signature)
 ```
 
 ### Commit part
 
-for every transaction:
-
+```
+transaction_confirmation = (transaction_hash, signature) or FALSE
 ```
 
-verify merkle proof of note
-check that note = 
+for every transaction_confirmation:
 
+```
+transaction_confirmation == FALSE and state == stateAfterDeposit
 ```
