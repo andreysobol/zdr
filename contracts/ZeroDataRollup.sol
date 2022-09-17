@@ -9,53 +9,36 @@ pragma solidity >=0.7.0 <0.9.0;
  */
 contract ZeroDataRollup {
 
+    event DepositInitiated(address indexed from, address indexed to, uint256 indexed coinId);
+
     uint256 public mintedCoinsCounter; // default 0
     uint256 public unprocessedDepositAmount; // default 0
-    mapping(address => hereWillBeStructure) public mintedCoins; // default 0
+
+    struct DepositDetails {
+        uint256 coinId;
+        uint256 amount;
+        uint256 l1BlockNumber; 
+    }
+    mapping(address => DepositDetails) public mintedCoins; // default 0
 
     function deposit(
-        address _l2Receiver,
-        address _l1Token,
-        uint256 _amount)
-    // TODO: remove nonReentrant
-    external payable nonReentrant returns (bytes32 txHash) {
-
-        /*
-
-        Deposit ETH to the contract. This function should:
-        1. Increase number of `mintedCoinsCounter`. 
-        2. Use this `mintedCoinsCounter` as `coinId` for the `Deposit` event.
-        3. Mint event `Deposit` with the amount of ETH deposited and address of the sender.
-        4. Add deposit to some magic structure of the deposit. Mb it's will be maping of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
-        5. Increase unprocessed deposits amount.
-
-        */
+        address _l2Receiver)
+    external payable {  
+        require(msg.value > 0);  
 
         uint256 coinId = mintedCoinsCounter;
-
         mintedCoinsCounter = mintedCoinsCounter + 1;
 
-        message.sender
+        emit DepositInitiated(msg.sender, _l2Receiver, coinId);
 
-        // TODO intoduce Deposit event
-        // TODO Check the amount of ETH 
-        Deposit(coinId, message.sender, message.value.amount);
+        DepositDetails memory depositDetails= DepositDetails (
+            coinId,
+            msg.value,
+            block.number
+        );
 
-        mintedCoins = message.sender : {
-            coinId: coinId,
-            amount: message.value.amount,
-            l1BlockNumber: block.number,
-        }
+        mintedCoins[msg.sender] = depositDetails;
 
         unprocessedDepositAmount = unprocessedDepositAmount + 1;
-
-    }
-
-    /**
-     * @dev Return value 
-     * @return value of 'number'
-     */
-    function retrieve() public view returns (uint256){
-        return number;
     }
 }
