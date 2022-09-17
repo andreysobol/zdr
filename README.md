@@ -1,5 +1,7 @@
 # Zero Data Rollup
 
+![NFT](imgs/horsecar.jpeg)
+
 Zero Data Rollup: it's a protocol with rollup security properties and off-chain data availability. 
 
 How can it possible?
