@@ -58,7 +58,14 @@ TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 
 ## Circuit
 
-Circuit separetadet do 2 parts. Commitment part and execution part.
+Circuit separetadet do 4 parts:
+- Contract withdraw parts
+- Deposit parts
+- Transfer commitment parts
+- Transfer execution parts
+
+
+Commitment part and execution part.
 
 Comman variables and constraints:
 
@@ -66,9 +73,21 @@ Comman variables and constraints:
 hash(transactions) = transactions_hash
 ```
 
-# Commit part
-
-for every transaction
+```
+transaction = (from_address, to_address, amount, coin_id, signature)
+```
 
 ```
+transaction_confirmation = (transaction_hash, signature)
+```
+
+### Commit part
+
+for every transaction:
+
+```
+
+verify merkle proof of note
+check that note = 
+
 ```
