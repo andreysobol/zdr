@@ -9,7 +9,6 @@ List of functions:
 - `processWithdraw()`
 - `executeBlock()`
 - `startExodus()`
-- `withdrawInExodus()`
 
 ### Deposit
 
@@ -25,8 +24,10 @@ Deposit ETH to the contract. This function should:
 If exodus is not started:
 1. Get `merkleRoot` from `merkleRoots` by `L2blockNumber` 
 2. Verify that `merklePath` from arguments is valid merkle path to `merkleRoot`
-3. Emmit `WaitingForWithdraw` event with `amount` and `address` of the sender
-4. Add this withdraw to `WaitingForWithdrawals` map. Set `amount` and `address` and `L1BlockNumber` of the deposit.
+3. Verify that `coinId` is not used before. If it's used - check that `coinId` > current `coinId` from `usedCoinIds`
+5. Remove previous withdraw from `WaitingForWithdrawals`
+6. Emmit `WaitingForWithdraw` event with `amount` and `address` of the sender
+7. Add this withdraw to `WaitingForWithdrawals` map. Set `amount` and `address` and `L1BlockNumber` of the deposit.
 
 ### ProcessWithdraw
 
@@ -44,6 +45,8 @@ If exodus is not started:
 6. Send ETH to all `WithdrawsBytes`
 7. Remove all elements of `WithdrawsBytes` from `WaitingForWithdrawals` map
 8. Emmit `BlockExecuted` event with `L2blockNumber`, `newMerkleRoot`, `hash(DepositsBytes)`, `hash(WithdrawsBytes)`
+
+TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 
 ### StartExodus
 
