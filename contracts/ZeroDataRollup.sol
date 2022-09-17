@@ -3,6 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import "./Storage.sol";
+import "./MerkleVerifier.sol";
 
 /**
  * @title ZeroDataRollup
@@ -27,12 +28,58 @@ contract ZeroDataRollup is Storage {
             block.number
         );
 
-        priorityQueue[coinId] = depositDetails;
+        depositQueue[coinId] = depositDetails;
+        usedCoinIds[coinId][block.number] = _l2Receiver;
 
         emit DepositInitiated(msg.sender, _l2Receiver, coinId, msg.value);
     }
 
-    function withdraw(address _l1Receiver) external {}
+    function withdraw(
+        uint256 _coinId,
+        uint256 _l1BlockNumber,
+        bytes32[] calldata _path,
+        uint256 _index,
+        bytes32 _itemHash,
+        uint256 _blockNumber
+    ) external notExodus {
+      bytes32 actualRoot = MerkleVerifier.calculateRoot(
+            _path,
+            _index,
+            _itemHash
+        );
+
+        require(actualRoot == merkleRoots[_blockNumber]);
+
+        require(usedCoinIds[_coinId][_l1BlockNumber] == msg.sender);
+
+        uint256 currentWithdrawals = processedForceWithdrawals;
+        processedForceWithdrawals++;
+        forceWithdrawsQueue[currentWithdrawals] = WithdrawDetails(
+            currentWithdrawals,
+            msg.sender,
+            _coinId,
+            _l1BlockNumber,
+            _index,
+            _itemHash
+        );
+
+        emit WithdrawRequestAccepted(msg.sender, _coinId, _blockNumber);
+    }
+
+    function finalizeWithdraw(uint256 withdrawId) external notExodus {
+        if(block.number <  WITHDRAW_WAITING_TIME + forceWithdrawsQueue[withdrawId].l1BlockNumber){
+
+        } else{
+            isExodus = true;
+            startExodus();
+        }
+
+    }
+
+    function startExodus() internal {
+        
+
+    }
 
     function ExecuteBlock(
         uint256 newMerkleRoot,
@@ -45,7 +92,9 @@ contract ZeroDataRollup is Storage {
         bytes32 hashedWithdraws = keccak256(withdrawsBytes);
 
         currentBlockNumber++;
-        // verify(prevMerkleRoot, newMerkleRoot, proof);
+        // todo: remove deposit records from depositQueue and update processedDepositAmount
+        // todo: verify(prevMerkleRoot, newMerkleRoot, proof);
+
     }
 
     function verify(
