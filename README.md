@@ -51,8 +51,18 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
     - [ ] Client spec
 - [x] Smart contract
 - [x] Circuit
+ - [x] Main circuit
+ - [x] Run all types of transaction function
+ - [x] Test with real block example
+ - [x] State and merle tree
+ - [ ] Proof of preimage of non algebraic hash
+ - [ ] Transaction parser
 - [ ] Operator node
 - [ ] UI for client
+- [x] ETH support
+- [ ] ERC20 support
+- [ ] NFT support
+- [ ] Atomic swap support
 
 # Tech stack
 
