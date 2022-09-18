@@ -16,3 +16,7 @@ Cargo.lock
 # IDE
 /.idea/
 /.vscode/
+
+contracts/node_modules/*
+contracts/artifacts/*
+contracts/cache/*
