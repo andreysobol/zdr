@@ -10,6 +10,9 @@ import "./MerkleVerifier.sol";
  * @dev Store & retrieve value in a variable
  * @custom:dev-run-script ./scripts/deploy.ts
  */
+
+// TODO: ReentrancyGuard
+
 contract ZeroDataRollup is Storage {
     modifier notExodus() {
         require(!isExodus, "Exodus activated");
@@ -111,6 +114,7 @@ contract ZeroDataRollup is Storage {
         return tempBytes20;
     }
 
+    // TODO: only owner
     function executeBlock(
         uint256 newMerkleRoot,
         bytes calldata depositsBytes,
