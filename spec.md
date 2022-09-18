@@ -1,6 +1,6 @@
 # SPEC
 
-## Contract
+# Contract
 
 List of functions:
 
@@ -10,7 +10,7 @@ List of functions:
 - `executeBlock()`
 - `startExodus()`
 
-### Deposit
+## Deposit
 
 Deposit ETH to the contract. This function should:
 1. Check that exodus mode is not active.
@@ -20,7 +20,7 @@ Deposit ETH to the contract. This function should:
 5. Add deposit to map of address to amount of ETH, `coinId` and `L1BlockNumber` of the deposit.
 6. Increase unprocessed deposits amount.
 
-### Withdraw
+## Withdraw
 
 If exodus is not started:
 1. Get `merkleRoot` from `merkleRoots` by `L2blockNumber` 
@@ -30,13 +30,13 @@ If exodus is not started:
 6. Emmit `WaitingForWithdraw` event with `amount` and `address` of the sender
 7. Add this withdraw to `WaitingForWithdrawals` map. Set `amount` and `address` and `L1BlockNumber` and `merklePosition` and `coinId` of the deposit.
 
-### ProcessWithdraw
+## ProcessWithdraw
 
 1. Check that `withdrawId` in `WaitingForWithdraw` structure.
 2. Check that `L1BlockNumber` + `WITHDRAW_WAITING_TIME` of the deposit is less than current `L1BlockNumber`
 3. Start exodus if it's not started.
 
-### ExecuteBlock
+## ExecuteBlock
 
 1. Set `prevMerkleRoot` as value from `merkleRoots` by key `lastL2blockNumber`
 2. Calculate `hash(DepositsBytes)`
@@ -49,7 +49,7 @@ If exodus is not started:
 
 TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 
-### StartExodus
+## StartExodus
 
 1. Check that `exodusStarted` is false
 2. Set `censouredDeposits` as value from some magic structure of the deposits with key `censouredDepositId`
@@ -57,7 +57,7 @@ TODO PART: publish coinId in Withdrawals, ProcessWithdraw
 4. Emmit `ExodusStarted` event
 5. `exodusStarted` = true
 
-## Circuit
+# Circuit
 
 Circuit separetadet do 4 parts:
 - Contract withdraw parts
@@ -73,7 +73,7 @@ Public inputs:
 - `markle_root(wrongWithdrawals)`
 - `hash(deposits)`
 
-### Contract withdraw parts
+## Contract withdraw parts
 
 ```
 hash(contractWithdrawals) = contractWithdrawals
@@ -108,7 +108,7 @@ and check that `accomulatorWrongWithdrawals == markle_root(wrongWithdrawals)`
 
 save final state to `stateAfterWithdrawals`
 
-### Deposit parts
+## Deposit parts
 
 ```
 hash(deposits) = deposits
@@ -123,7 +123,7 @@ state = addOneToMerkleTree(state, deposit)
 
 save final state to `stateAfterDeposit`
 
-### Transfer commitment parts
+## Transfer commitment parts
 
 ```
 hash(transactions) = transactions_hash
@@ -142,7 +142,7 @@ state = addOneToMerkleTree(state, from_address, to_address, amount, coin_id, sig
 transferAccomulator = addOneToMerkleTree(transferAccomulator, transaction)
 ```
 
-### Commit part
+## Transfer execution parts
 
 for every withdrawal:
 
