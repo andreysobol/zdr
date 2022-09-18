@@ -75,6 +75,19 @@ cargo build --release
 cat ./hardhat/contracts/VerificationKey.sol | sed 's%import "hardhat/console.sol";% %g' > PATH_TO_SC/VerificationKey.sol
 ```
 
+Compile Smart Contracts
+
+```
+cd contracts
+npx hardhat compile
+```
+
+Deploy Smart Contracts
+
+```
+npx hardhat run scripts/deploy.js
+```
+
 # Demo
 
 TODO
