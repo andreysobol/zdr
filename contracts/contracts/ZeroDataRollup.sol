@@ -60,7 +60,8 @@ contract ZeroDataRollup is Storage {
             _coinId,
             _l1BlockNumber,
             _index,
-            _itemHash
+            _itemHash,
+            _coinId
         );
 
         usedCoinIds[_coinId] = _blockNumber;
@@ -68,19 +69,24 @@ contract ZeroDataRollup is Storage {
         emit WithdrawRequestAccepted(currentWithdrawals, msg.sender, _coinId, _blockNumber);
     }
 
-    function finalizeWithdraw(uint256 withdrawId) external notExodus {
-        if(block.number <  WITHDRAW_WAITING_TIME + forceWithdrawsQueue[withdrawId].l1BlockNumber){
+    function processWithdraw(uint256 withdrawId) external notExodus {
+        require(forceWithdrawsQueue[withdrawId].l1BlockNumber != 0);
+        require(block.number <  WITHDRAW_WAITING_TIME + forceWithdrawsQueue[withdrawId].l1BlockNumber);
+        isExodus = true;
 
-        } else{
-            isExodus = true;
-            startExodus();
-        }
+        address payable receiver = payable(forceWithdrawsQueue[withdrawId].receiver);
+        uint256 amount = forceWithdrawsQueue[withdrawId].amount;
+        uint256 coinId = forceWithdrawsQueue[withdrawId].coinId;
 
+        delete forceWithdrawsQueue[withdrawId];
+        delete usedCoinIds[coinId];
+        receiver.transfer(amount);
     }
 
-    function startExodus() internal {
-        
-
+    function startExodus(uint256 censouredDepositId) external notExodus {
+        DepositDetails memory censouredDeposits = depositQueue[censouredDepositId];
+        require(DEPOSIT_WAITING_TIME + censouredDeposits.l1BlockNumber < block.number);
+        isExodus = true;
     }
 
     function toBytes32(bytes memory _bytes, uint256 _start) internal pure returns (bytes32) {

@@ -33,6 +33,7 @@ contract Storage {
         uint256 l1BlockNumber;
         uint256 merklePosition;
         bytes32 itemHash;
+        uint256 coinId;
     }
 
     uint256 processedDepositAmount;
@@ -50,5 +51,6 @@ contract Storage {
     bool isExodus;
 
 
-   uint16 WITHDRAW_WAITING_TIME = 1000;
+   uint256 WITHDRAW_WAITING_TIME = 1000;
+   uint256 DEPOSIT_WAITING_TIME = 1000;
 }
