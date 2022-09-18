@@ -95,17 +95,17 @@ contract ZeroDataRollup is Storage {
     }
 
     function toBytes20(bytes memory _bytes, uint256 _start) internal pure returns (bytes20) {
-        require(_bytes.length >= _start + 32, "toBytes32_outOfBounds");
+        require(_bytes.length >= _start + 20, "toBytes32_outOfBounds");
         bytes20 tempBytes20;
 
         assembly {
-            tempBytes20 := mload(add(add(_bytes, 0x20), _start))
+            tempBytes20 := mload(add(add(_bytes, 0x14), _start))
         }
 
         return tempBytes20;
     }
 
-    function ExecuteBlock(
+    function executeBlock(
         uint256 newMerkleRoot,
         bytes calldata depositsBytes,
         bytes calldata withdrawsBytes,
