@@ -47,8 +47,8 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
 - [X] Spec
     - [X] Smart contract spec
     - [X] Circuit spec
-    - [ ] Operator node spec
-    - [ ] Client spec
+    - [x] Operator node spec
+    - [ ] Client spec 
 - [x] Smart contract
 - [x] Circuit
     - [x] Main circuit

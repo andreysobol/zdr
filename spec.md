@@ -161,3 +161,13 @@ transferAccomulator == removeElement(transferAccomulator, transaction)
 ```
 
 in the end check that `transferAccomulator == empty_merkle_tree`
+
+# Operator node
+
+It's trivial.
+
+1. Get from the contract: Deposits, Withdrawals
+2. Colect transactions from senders
+3. Collect confirmations from receivers
+4. Withdrawals without confirmations
+5. Commit block
