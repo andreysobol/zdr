@@ -59,19 +59,19 @@ cd circuit
 cargo build
 ```
 
-## Generate VK
+run tested block and other tests
 
 ```
 cd circuit
-cargo run
+cargo test
 ```
 
-## Generate Solidity Plonk Verifier
+Generate Solidity Plonk Verifier using verification key
 
 ```
 cd circuit/solidity_plonk_verifier/
 cargo build --release
-./target/release/solidity_plonk_verifier --verification-key /tmp/create_account_vk_keccak.key
+./target/release/solidity_plonk_verifier --verification-key ../vk.txt
 cat ./hardhat/contracts/VerificationKey.sol | sed 's%import "hardhat/console.sol";% %g' > PATH_TO_SC/VerificationKey.sol
 ```
 
