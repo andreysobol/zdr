@@ -124,8 +124,13 @@ contract ZeroDataRollup is Storage {
         bytes32 hashedDeposits = keccak256(depositsBytes);
         bytes32 hashedWithdraws = keccak256(withdrawsBytes);
 
-        // todo: remove deposit records from depositQueue and update processedDepositAmount
-        // verify(prevMerkleRoot, newMerkleRoot, proof);
+        uint256[] memory public_inputs = new uint256[](3);
+        public_inputs[0] = uint256(prevMerkleRoot);
+        public_inputs[1] = uint256(newMerkleRoot);
+        public_inputs[2] = uint256(hashedDeposits);
+        public_inputs[3] = uint256(hashedWithdraws);
+
+        verify(public_inputs, proof);
 
         for (uint256 i = 0; i < depositsBytes.length; i += 32*3) {
             uint256 coinId = uint256(toBytes32(depositsBytes, i));
