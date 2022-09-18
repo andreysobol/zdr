@@ -16,7 +16,7 @@ When a user deposits a coin - the protocol creates a unique coinId. After that o
 
 So every owner and past owner of the coin knows the Merkle path of this coin in some previous state. And there is some simple dispute resolution protocol for dispute - who is the owner of this coin - latest Merkle path to the state with this coin is the owner. And every user has incentives to keep his data and monitor L1. And participate in the dispute resolution protocol.
 
-Last things: of course operator prove state using ZK.
+Last things: of course operator prove state transition using ZK.
 
 # Limitations
 
@@ -75,6 +75,7 @@ more details in [spec.md](spec.md)
     - [x] VK for main circuit
     - [ ] Proof of preimage of non algebraic hash
     - [ ] Transaction parser
+    - [ ] Many unimplemented functions
 - [ ] Operator node
 - [ ] UI for client
 - [x] ETH support
