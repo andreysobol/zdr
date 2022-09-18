@@ -44,7 +44,15 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
 
 # What we implemented
 
-TODO
+- [X] Spec
+    - [X] Smart contract spec
+    - [X] Circuit spec
+    - [ ] Operator node spec
+    - [ ] Client spec
+- [x] Smart contract
+- [x] Circuit
+- [ ] Operator node
+- [ ] UI for client
 
 # Tech stack
 
