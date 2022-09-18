@@ -50,6 +50,8 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
 - ExecuteBlock - execute block of transactions with ZK proof
 - StartExodus - start exodus mode if operator did not process deposit
 
+more details in [spec.md](spec.md)
+
 # What we implemented
 
 - [X] Spec
