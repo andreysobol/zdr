@@ -8,7 +8,7 @@ import "./MerkleVerifier.sol";
 /**
  * @title ZeroDataRollup
  * @dev Store & retrieve value in a variable
- * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
+ * @custom:dev-run-script ./scripts/deploy.ts
  */
 contract ZeroDataRollup is Storage {
     modifier notExodus() {
@@ -29,7 +29,7 @@ contract ZeroDataRollup is Storage {
         );
 
         depositQueue[coinId] = depositDetails;
-        usedCoinIds[coinId][block.number] = _l2Receiver;
+        usedCoinIds[coinId] = 1;
 
         emit DepositInitiated(msg.sender, _l2Receiver, coinId, msg.value);
     }
@@ -42,15 +42,15 @@ contract ZeroDataRollup is Storage {
         bytes32 _itemHash,
         uint256 _blockNumber
     ) external notExodus {
-      bytes32 actualRoot = MerkleVerifier.calculateRoot(
+        bytes32 actualRoot = MerkleVerifier.calculateRoot(
             _path,
             _index,
             _itemHash
         );
 
         require(actualRoot == merkleRoots[_blockNumber]);
-
-        require(usedCoinIds[_coinId][_l1BlockNumber] == msg.sender);
+        require(usedCoinIds[_coinId] != 0);
+        require(usedCoinIds[_coinId] < _blockNumber);
 
         uint256 currentWithdrawals = processedForceWithdrawals;
         processedForceWithdrawals++;
@@ -62,6 +62,8 @@ contract ZeroDataRollup is Storage {
             _index,
             _itemHash
         );
+
+        usedCoinIds[_coinId] = _blockNumber;
 
         emit WithdrawRequestAccepted(currentWithdrawals, msg.sender, _coinId, _blockNumber);
     }
@@ -81,19 +83,59 @@ contract ZeroDataRollup is Storage {
 
     }
 
+    function toBytes32(bytes memory _bytes, uint256 _start) internal pure returns (bytes32) {
+        require(_bytes.length >= _start + 32, "toBytes32_outOfBounds");
+        bytes32 tempBytes32;
+
+        assembly {
+            tempBytes32 := mload(add(add(_bytes, 0x20), _start))
+        }
+
+        return tempBytes32;
+    }
+
+    function toBytes20(bytes memory _bytes, uint256 _start) internal pure returns (bytes20) {
+        require(_bytes.length >= _start + 32, "toBytes32_outOfBounds");
+        bytes20 tempBytes20;
+
+        assembly {
+            tempBytes20 := mload(add(add(_bytes, 0x20), _start))
+        }
+
+        return tempBytes20;
+    }
+
     function ExecuteBlock(
         uint256 newMerkleRoot,
         bytes calldata depositsBytes,
         bytes calldata withdrawsBytes,
         uint256[] calldata proof
     ) external notExodus {
+        currentBlockNumber++; // currentBlockNumber will start from 1
+
+        // Genesis is a zero
         bytes32 prevMerkleRoot = merkleRoots[currentBlockNumber];
         bytes32 hashedDeposits = keccak256(depositsBytes);
         bytes32 hashedWithdraws = keccak256(withdrawsBytes);
 
-        currentBlockNumber++;
         // todo: remove deposit records from depositQueue and update processedDepositAmount
-        // todo: verify(prevMerkleRoot, newMerkleRoot, proof);
+        // verify(prevMerkleRoot, newMerkleRoot, proof);
+
+        for (uint256 i = 0; i < depositsBytes.length; i += 32*3) {
+            uint256 coinId = uint256(toBytes32(depositsBytes, i));
+            delete depositQueue[coinId];
+        }
+
+        for (uint256 i = 0; i < withdrawsBytes.length; i += 32*6) {
+            address payable receiver = payable(address(toBytes20(depositsBytes, i)));
+            uint256 amount = uint256(toBytes32(depositsBytes, i+20));
+            uint256 coinId = uint256(toBytes32(depositsBytes, i+20+32));
+            uint256 processedForceWithdrawals = uint256(toBytes32(depositsBytes, i+20+32*2));
+
+            delete forceWithdrawsQueue[processedForceWithdrawals];
+            delete usedCoinIds[coinId];
+            receiver.transfer(amount);
+        }
 
     }
 

@@ -44,7 +44,7 @@ contract Storage {
     uint256 currentBlockNumber;
     mapping(uint256 => bytes32) merkleRoots;
 
-    mapping(uint256 => mapping(uint256 => address)) usedCoinIds;
+    mapping(uint256 => uint256) usedCoinIds;
 
     uint256 mintedCoinsCounter;
     bool isExodus;
