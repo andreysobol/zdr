@@ -42,6 +42,14 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
 | need interactive communication | NO     | NO                    | YES              |
 | can be Turing Complete         | YES    | YES                   | NO               |
 
+# Smart contracts functions
+
+- Deposit - deposit ETH to L2
+- Withdraw - ask about withdraw form L2 to L1 and participate in dispute resolution protocol
+- WithdrawConfirm - confirm withdraw from L2 to L1 after dispute resolution timeout
+- ExecuteBlock - execute block of transactions with ZK proof
+- StartExodus - start exodus mode if operator did not process deposit
+
 # What we implemented
 
 - [X] Spec
