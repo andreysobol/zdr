@@ -42,13 +42,18 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
 | need interactive communication | NO     | NO                    | YES              |
 | can be Turing Complete         | YES    | YES                   | NO               |
 
-# What we implement
+# What we implemented
 
 TODO
 
 # Tech stack
 
-TODO
+- [plonk](https://eprint.iacr.org/2019/953.pdf): prove system with universal trusted setup
+- [belman_ce](https://github.com/matter-labs/bellman): fork of original belman with plonk
+- [franklin-crypto](https://github.com/matter-labs/franklin-crypto): Gadget library for PLONK/Plookup
+- [solidity plonk verifier](https://github.com/andreysobol/solidity_plonk_verifier) solidity plonk verifier with lookup tables
+- [rescue poseidon](https://github.com/matter-labs/rescue-poseidon): Rescue and Poseidon argebraic hash circuit implementation 
+- [hardhat](https://hardhat.org/): Eth contract toolkit
 
 # How to use it
 
