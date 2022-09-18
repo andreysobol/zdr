@@ -55,6 +55,7 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
     - [x] Run all types of transaction function
     - [x] Test with real block example
     - [x] State and merle tree
+    - [x] VK for main circuit
     - [ ] Proof of preimage of non algebraic hash
     - [ ] Transaction parser
 - [ ] Operator node
