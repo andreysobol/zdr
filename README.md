@@ -58,6 +58,11 @@ We can introduce an atomic transaction where 2 user exchanges a few indivisible 
     - [x] Operator node spec
     - [ ] Client spec 
 - [x] Smart contract
+    - [x] Deposit
+    - [x] Withdraw
+    - [x] WithdrawConfirm
+    - [x] ExecuteBlock
+    - [x] StartExodus
 - [x] Circuit
     - [x] Main circuit
     - [x] Run all types of transaction function
